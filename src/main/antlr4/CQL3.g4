@@ -1,13 +1,13 @@
-// http://cassandra.apache.org/doc/cql3/CQL.html
+// Derived from http://cassandra.apache.org/doc/cql3/CQL.html
 
 grammar CQL3;
 
 
 statements: statement? (';' statement)* ;
 
-statement: select_statement ;
+statement: query ;
 
-select_statement: K_SELECT select_clause K_FROM table_name ;
+query: K_SELECT select_clause K_FROM table_name ;
 
 select_clause: '*' ;
 
