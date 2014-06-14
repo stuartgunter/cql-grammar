@@ -117,6 +117,7 @@ statements
 
 statement
     : query
+    | ddl_stmt
     ;
 
 query
@@ -131,11 +132,18 @@ table_name
     : (IDENTIFIER '.')? IDENTIFIER
     ;
 
-
+ddl_stmt
+    : create_keyspace_stmt
+    | alter_keyspace_stmt
+    ;
 
 
 create_keyspace_stmt
     : K_CREATE K_KEYSPACE (K_IF K_NOT K_EXISTS)? IDENTIFIER K_WITH PROPERTIES
+    ;
+
+alter_keyspace_stmt
+    : K_ALTER K_KEYSPACE IDENTIFIER K_WITH PROPERTIES
     ;
 
 
