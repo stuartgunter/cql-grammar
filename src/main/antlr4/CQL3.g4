@@ -135,6 +135,7 @@ table_name
 ddl_stmt
     : create_keyspace_stmt
     | alter_keyspace_stmt
+    | drop_keyspace_stmt
     ;
 
 
@@ -146,9 +147,13 @@ alter_keyspace_stmt
     : K_ALTER K_KEYSPACE IDENTIFIER K_WITH PROPERTIES
     ;
 
+drop_keyspace_stmt
+    : K_DROP K_KEYSPACE ( K_IF K_EXISTS )? IDENTIFIER
+    ;
 
 K_AND : A N D;
 K_CREATE : C R E A T E;
+K_DROP : D R O P;
 K_EXISTS : E X I S T S;
 K_FALSE : F A L S E;
 K_FROM : F R O M;
