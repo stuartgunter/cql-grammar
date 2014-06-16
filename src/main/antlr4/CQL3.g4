@@ -21,7 +21,7 @@ grammar CQL3;
 
 
 statements
-    : ( statement ';'? )*
+    : (statement ';'?)*
     ;
 
 statement
@@ -31,7 +31,7 @@ statement
     ;
 
 create_keyspace_stmt
-    : K_CREATE K_KEYSPACE ( K_IF K_NOT K_EXISTS )? keyspace_name K_WITH PROPERTIES
+    : K_CREATE K_KEYSPACE (K_IF K_NOT K_EXISTS)? keyspace_name K_WITH PROPERTIES
     ;
 
 alter_keyspace_stmt
@@ -39,13 +39,58 @@ alter_keyspace_stmt
     ;
 
 drop_keyspace_stmt
-    : K_DROP K_KEYSPACE ( K_IF K_EXISTS )? keyspace_name
+    : K_DROP K_KEYSPACE (K_IF K_EXISTS)? keyspace_name
     ;
 
 use_stmt
     : K_USE IDENTIFIER
     ;
 
+
+create_table_stmt
+    : K_CREATE (K_TABLE | K_COLUMNFAMILY) (K_IF K_NOT K_EXISTS)? table_name column_definitions (K_WITH table_options)?
+    ;
+
+
+table_name
+    : IDENTIFIER
+    ;
+
+column_name
+    : IDENTIFIER
+    ;
+
+table_options
+    : table_option (K_AND table_option)*
+    ;
+
+table_option
+    : PROPERTY
+    | K_COMPACT K_STORAGE
+    | K_CLUSTERING K_ORDER
+    ;
+
+column_definitions
+    : '(' column_definition (',' column_definition)* ')'
+    ;
+
+column_definition
+    : column_name column_type (K_STATIC)? (K_PRIMARY K_KEY)?
+    | K_PRIMARY K_KEY primary_key
+    ;
+
+column_type
+    :
+    ;
+
+primary_key
+    : '(' partition_key (',' column_name)* ')'
+    ;
+
+partition_key
+    : column_name
+    | '(' column_name (',' column_name)* ')'
+    ;
 
 keyspace_name
     : IDENTIFIER
@@ -140,6 +185,39 @@ HEX
 BLOB
     : '0' X (HEX)+
     ;
+
+
+data_type
+    : native_type
+    | collection_type
+    | STRING
+    ;
+
+native_type
+    : 'ascii'
+    | 'bigint'
+    | 'blob'
+    | 'boolean'
+    | 'counter'
+    | 'decimal'
+    | 'double'
+    | 'float'
+    | 'inet'
+    | 'int'
+    | 'text'
+    | 'timestamp'
+    | 'timeuuid'
+    | 'uuid'
+    | 'varchar'
+    | 'varint'
+    ;
+
+collection_type
+    : 'list' '<' native_type '>'
+    | 'set' '<' native_type '>'
+    | 'map' '<' native_type ',' native_type '>'
+    ;
+
 
 
 K_ALTER : A L T E R;
