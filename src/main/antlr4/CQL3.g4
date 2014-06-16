@@ -25,6 +25,11 @@ statements
     ;
 
 statement
+    : ddl_stmt
+    | dml_stmt
+    ;
+
+ddl_stmt
     : drop_keyspace_stmt
     | create_keyspace_stmt
     | alter_keyspace_stmt
@@ -32,6 +37,10 @@ statement
     | create_table_stmt
     | alter_table_stmt
     | drop_table_stmt
+    ;
+
+dml_stmt
+    : truncate_table
     ;
 
 create_keyspace_stmt
@@ -50,7 +59,6 @@ use_stmt
     : K_USE IDENTIFIER
     ;
 
-
 create_table_stmt
     : K_CREATE (K_TABLE | K_COLUMNFAMILY) (K_IF K_NOT K_EXISTS)? table_name column_definitions (K_WITH table_options)?
     ;
@@ -68,6 +76,10 @@ alter_table_instruction
 
 drop_table_stmt
     : K_DROP K_TABLE (K_IF K_EXISTS)? table_name
+    ;
+
+truncate_table
+    : K_TRUNCATE table_name
     ;
 
 table_name
@@ -98,7 +110,7 @@ column_definition
     ;
 
 column_type
-    :
+    : data_type
     ;
 
 primary_key
@@ -260,6 +272,7 @@ K_STATIC:       S T A T I C;
 K_STORAGE:      S T O R A G E;
 K_TABLE:        T A B L E;
 K_TRUE:         T R U E;
+K_TRUNCATE:     T R U N C A T E;
 K_TYPE:         T Y P E;
 K_USE:          U S E;
 K_WITH:         W I T H;
