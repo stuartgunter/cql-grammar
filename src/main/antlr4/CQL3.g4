@@ -31,21 +31,25 @@ statement
     ;
 
 create_keyspace_stmt
-    : K_CREATE K_KEYSPACE ( K_IF K_NOT K_EXISTS )? IDENTIFIER K_WITH PROPERTIES
+    : K_CREATE K_KEYSPACE ( K_IF K_NOT K_EXISTS )? keyspace_name K_WITH PROPERTIES
     ;
 
 alter_keyspace_stmt
-    : K_ALTER K_KEYSPACE IDENTIFIER K_WITH PROPERTIES
+    : K_ALTER K_KEYSPACE keyspace_name K_WITH PROPERTIES
     ;
 
 drop_keyspace_stmt
-    : K_DROP K_KEYSPACE ( K_IF K_EXISTS )? IDENTIFIER
+    : K_DROP K_KEYSPACE ( K_IF K_EXISTS )? keyspace_name
     ;
 
 use_stmt
     : K_USE IDENTIFIER
     ;
 
+
+keyspace_name
+    : IDENTIFIER
+    ;
 
 IDENTIFIER
     : [a-zA-Z0-9_]+
