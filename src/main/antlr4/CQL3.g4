@@ -31,11 +31,11 @@ statement
     ;
 
 create_keyspace_stmt
-    : K_CREATE K_KEYSPACE (K_IF K_NOT K_EXISTS)? keyspace_name K_WITH PROPERTIES
+    : K_CREATE K_KEYSPACE (K_IF K_NOT K_EXISTS)? keyspace_name K_WITH properties
     ;
 
 alter_keyspace_stmt
-    : K_ALTER K_KEYSPACE keyspace_name K_WITH PROPERTIES
+    : K_ALTER K_KEYSPACE keyspace_name K_WITH properties
     ;
 
 drop_keyspace_stmt
@@ -127,27 +127,27 @@ COLLECTION
     ;
 
 MAP
-    : '{' ( TERM ':' TERM ( ',' TERM ':' TERM )* )? '}'
+    : '{' (TERM ':' TERM (',' TERM ':' TERM)*)? '}'
     ;
 
 SET
-    : '{' ( TERM ( ',' TERM )* )? '}'
+    : '{' (TERM (',' TERM)*)? '}'
     ;
 
 LIST
-    : '[' ( TERM ( ',' TERM )* )? ']'
+    : '[' (TERM (',' TERM)*)? ']'
     ;
 
 FUNCTION
-    : IDENTIFIER '(' ( TERM ( ',' TERM )* )? ')'
+    : IDENTIFIER '(' (TERM (',' TERM)*)? ')'
     ;
 
-PROPERTIES
-    : PROPERTY ( K_AND PROPERTY )*
+properties
+    : property (K_AND property)*
     ;
 
-PROPERTY
-    : IDENTIFIER '=' ( IDENTIFIER | CONSTANT | MAP )
+property
+    : IDENTIFIER '=' (IDENTIFIER | CONSTANT | MAP)
     ;
 
 STRING
@@ -220,20 +220,24 @@ collection_type
 
 
 
-K_ALTER : A L T E R;
-K_AND : A N D;
-K_CREATE : C R E A T E;
-K_DROP : D R O P;
-K_EXISTS : E X I S T S;
-K_FALSE : F A L S E;
-K_FROM : F R O M;
-K_IF : I F;
-K_KEYSPACE : K E Y S P A C E;
-K_NOT : N O T;
-K_SELECT : S E L E C T;
-K_TRUE : T R U E;
-K_USE : U S E;
-K_WITH : W I T H;
+K_ALTER:        A L T E R;
+K_AND:          A N D;
+K_CLUSTERING:   C L U S T E R I N G;
+K_COMPACT:      C O M P A C T;
+K_CREATE:       C R E A T E;
+K_DROP:         D R O P;
+K_EXISTS:       E X I S T S;
+K_FALSE:        F A L S E;
+K_FROM:         F R O M;
+K_IF:           I F;
+K_KEYSPACE:     K E Y S P A C E;
+K_NOT:          N O T;
+K_ORDER:        O R D E R;
+K_SELECT:       S E L E C T;
+K_STORAGE:      S T O R A G E;
+K_TRUE:         T R U E;
+K_USE:          U S E;
+K_WITH:         W I T H;
 
 
 fragment DIGIT : [0-9];
