@@ -25,11 +25,6 @@ statements
     ;
 
 statement
-    : ddl_stmt
-    | dml_stmt
-    ;
-
-ddl_stmt
     : drop_keyspace_stmt
     | create_keyspace_stmt
     | alter_keyspace_stmt
@@ -37,10 +32,7 @@ ddl_stmt
     | create_table_stmt
     | alter_table_stmt
     | drop_table_stmt
-    ;
-
-dml_stmt
-    : truncate_table
+    | truncate_table
     ;
 
 create_keyspace_stmt
@@ -56,7 +48,7 @@ drop_keyspace_stmt
     ;
 
 use_stmt
-    : K_USE IDENTIFIER
+    : K_USE keyspace_name
     ;
 
 create_table_stmt
@@ -83,7 +75,7 @@ truncate_table
     ;
 
 table_name
-    : IDENTIFIER
+    : (keyspace_name '.')? IDENTIFIER
     ;
 
 column_name
@@ -305,15 +297,6 @@ fragment W : [wW];
 fragment X : [xX];
 fragment Y : [yY];
 fragment Z : [zZ];
-
-RESERVED : A D D
-         | A L T E R
-         | A N D
-         | A N Y
-         | A P P L Y
-         | A S C
-         | A U T H O R I Z E
-         ;
 
 SINGLE_LINE_COMMENT
     : '--' ~[\r\n]* -> channel(HIDDEN)
