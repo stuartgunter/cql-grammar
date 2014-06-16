@@ -31,6 +31,7 @@ statement
     | use_stmt
     | create_table_stmt
     | alter_table_stmt
+    | drop_table_stmt
     ;
 
 create_keyspace_stmt
@@ -65,6 +66,10 @@ alter_table_instruction
     | K_WITH table_options
     ;
 
+drop_table_stmt
+    : K_DROP K_TABLE (K_IF K_EXISTS)? table_name
+    ;
+
 table_name
     : IDENTIFIER
     ;
@@ -78,7 +83,7 @@ table_options
     ;
 
 table_option
-    : PROPERTY
+    : property
     | K_COMPACT K_STORAGE
     | K_CLUSTERING K_ORDER
     ;
@@ -237,6 +242,7 @@ K_ADD:          A D D;
 K_ALTER:        A L T E R;
 K_AND:          A N D;
 K_CLUSTERING:   C L U S T E R I N G;
+K_COLUMNFAMILY: C O L U M N F A M I L Y;
 K_COMPACT:      C O M P A C T;
 K_CREATE:       C R E A T E;
 K_DROP:         D R O P;
@@ -244,11 +250,15 @@ K_EXISTS:       E X I S T S;
 K_FALSE:        F A L S E;
 K_FROM:         F R O M;
 K_IF:           I F;
+K_KEY:          K E Y;
 K_KEYSPACE:     K E Y S P A C E;
 K_NOT:          N O T;
 K_ORDER:        O R D E R;
+K_PRIMARY:      P R I M A R Y;
 K_SELECT:       S E L E C T;
+K_STATIC:       S T A T I C;
 K_STORAGE:      S T O R A G E;
+K_TABLE:        T A B L E;
 K_TRUE:         T R U E;
 K_TYPE:         T Y P E;
 K_USE:          U S E;
