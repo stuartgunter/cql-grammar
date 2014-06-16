@@ -338,7 +338,7 @@ fragment Y : [yY];
 fragment Z : [zZ];
 
 SINGLE_LINE_COMMENT
-    : '--' ~[\r\n]* -> channel(HIDDEN)
+    : ('--'|'//') ~[\r\n]* -> channel(HIDDEN)
     ;
 
 MULTILINE_COMMENT
