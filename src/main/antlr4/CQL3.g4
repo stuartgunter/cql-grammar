@@ -34,6 +34,7 @@ statement
     | drop_table_stmt
     | truncate_table_stmt
     | create_index_stmt
+    | drop_index_stmt
     ;
 
 create_keyspace_stmt
@@ -78,6 +79,10 @@ truncate_table_stmt
 create_index_stmt
     : K_CREATE (K_CUSTOM)? K_INDEX (K_IF K_NOT K_EXISTS)? index_name? K_ON table_name '(' column_name ')'
       (K_USING index_class (K_WITH index_options)?)?
+    ;
+
+drop_index_stmt
+    : K_DROP K_INDEX (K_IF K_EXISTS)? index_name
     ;
 
 index_name
