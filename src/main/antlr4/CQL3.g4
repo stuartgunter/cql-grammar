@@ -28,6 +28,9 @@ statement
     : drop_keyspace_stmt
     | create_keyspace_stmt
     | alter_keyspace_stmt
+    | use_stmt
+    | create_table_stmt
+    | alter_table_stmt
     ;
 
 create_keyspace_stmt
@@ -51,6 +54,16 @@ create_table_stmt
     : K_CREATE (K_TABLE | K_COLUMNFAMILY) (K_IF K_NOT K_EXISTS)? table_name column_definitions (K_WITH table_options)?
     ;
 
+alter_table_stmt
+    : K_ALTER (K_TABLE | K_COLUMNFAMILY) table_name alter_table_instruction
+    ;
+
+alter_table_instruction
+    : K_ALTER column_name K_TYPE column_type
+    | K_ADD column_name column_type
+    | K_DROP column_name
+    | K_WITH table_options
+    ;
 
 table_name
     : IDENTIFIER
@@ -220,6 +233,7 @@ collection_type
 
 
 
+K_ADD:          A D D;
 K_ALTER:        A L T E R;
 K_AND:          A N D;
 K_CLUSTERING:   C L U S T E R I N G;
@@ -236,6 +250,7 @@ K_ORDER:        O R D E R;
 K_SELECT:       S E L E C T;
 K_STORAGE:      S T O R A G E;
 K_TRUE:         T R U E;
+K_TYPE:         T Y P E;
 K_USE:          U S E;
 K_WITH:         W I T H;
 
