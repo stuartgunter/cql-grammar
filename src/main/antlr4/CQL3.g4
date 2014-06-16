@@ -16,7 +16,31 @@
 
 // Derived from http://cassandra.apache.org/doc/cql3/CQL.html
 
+
 grammar CQL3;
+
+
+statements
+    : ( statement ';'? )*
+    ;
+
+statement
+    : drop_keyspace_stmt
+    | create_keyspace_stmt
+    | alter_keyspace_stmt
+    ;
+
+create_keyspace_stmt
+    : K_CREATE K_KEYSPACE ( K_IF K_NOT K_EXISTS )? IDENTIFIER K_WITH PROPERTIES
+    ;
+
+alter_keyspace_stmt
+    : K_ALTER K_KEYSPACE IDENTIFIER K_WITH PROPERTIES
+    ;
+
+drop_keyspace_stmt
+    : K_DROP K_KEYSPACE ( K_IF K_EXISTS )? IDENTIFIER
+    ;
 
 
 IDENTIFIER
@@ -40,7 +64,7 @@ TERM
     : CONSTANT
     | COLLECTION
     | VARIABLE
-    | FUNCTION '(' (TERM (',' TERM)*)? ')'
+    | FUNCTION
     ;
 
 COLLECTION
@@ -62,11 +86,11 @@ LIST
     ;
 
 FUNCTION
-    : IDENTIFIER
+    : IDENTIFIER '(' ( TERM ( ',' TERM )* )? ')'
     ;
 
 PROPERTIES
-    : PROPERTY (K_AND PROPERTY)*
+    : PROPERTY ( K_AND PROPERTY )*
     ;
 
 PROPERTY
@@ -106,51 +130,11 @@ HEX
     ;
 
 BLOB
-    : [0][xX](HEX)+
+    : '0' X (HEX)+
     ;
 
 
-
-statements
-    : statement? (';' statement)*
-    ;
-
-statement
-    : query
-    | ddl_stmt
-    ;
-
-query
-    : K_SELECT select_clause K_FROM table_name
-    ;
-
-select_clause
-    : '*'
-    ;
-
-table_name
-    : (IDENTIFIER '.')? IDENTIFIER
-    ;
-
-ddl_stmt
-    : create_keyspace_stmt
-    | alter_keyspace_stmt
-    | drop_keyspace_stmt
-    ;
-
-
-create_keyspace_stmt
-    : K_CREATE K_KEYSPACE (K_IF K_NOT K_EXISTS)? IDENTIFIER K_WITH PROPERTIES
-    ;
-
-alter_keyspace_stmt
-    : K_ALTER K_KEYSPACE IDENTIFIER K_WITH PROPERTIES
-    ;
-
-drop_keyspace_stmt
-    : K_DROP K_KEYSPACE ( K_IF K_EXISTS )? IDENTIFIER
-    ;
-
+K_ALTER : A L T E R;
 K_AND : A N D;
 K_CREATE : C R E A T E;
 K_DROP : D R O P;
@@ -208,10 +192,6 @@ SINGLE_LINE_COMMENT
 
 MULTILINE_COMMENT
     : '/*' .*? ( '*/' | EOF ) -> channel(HIDDEN)
-    ;
-
-SPACES
-    : [ \u000B\t\r\n] -> channel(HIDDEN)
     ;
 
 WS : [ \t\r\n] -> skip ;
