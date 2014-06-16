@@ -32,7 +32,8 @@ statement
     | create_table_stmt
     | alter_table_stmt
     | drop_table_stmt
-    | truncate_table
+    | truncate_table_stmt
+    | create_index_stmt
     ;
 
 create_keyspace_stmt
@@ -70,8 +71,25 @@ drop_table_stmt
     : K_DROP K_TABLE (K_IF K_EXISTS)? table_name
     ;
 
-truncate_table
+truncate_table_stmt
     : K_TRUNCATE table_name
+    ;
+
+create_index_stmt
+    : K_CREATE (K_CUSTOM)? K_INDEX (K_IF K_NOT K_EXISTS)? index_name? K_ON table_name '(' column_name ')'
+      (K_USING index_class (K_WITH index_options)?)?
+    ;
+
+index_name
+    : IDENTIFIER
+    ;
+
+index_class
+    : STRING
+    ;
+
+index_options
+    : K_OPTIONS '=' MAP
     ;
 
 table_name
@@ -262,13 +280,16 @@ reserved_keyword
     | K_AND
     | K_COLUMNFAMILY
     | K_CREATE
+    | K_CUSTOM // docs don't specify whether this is reserved or not, playing it safe
     | K_DROP
     | K_EXISTS // docs don't specify whether this is reserved or not, playing it safe
     | K_FALSE // docs don't specify whether this is reserved or not, playing it safe
     | K_FROM
     | K_IF // docs don't specify whether this is reserved or not, playing it safe
+    | K_INDEX
     | K_KEYSPACE
     | K_NOT // docs don't specify whether this is reserved or not, playing it safe
+    | K_OPTIONS // docs don't specify whether this is reserved or not, playing it safe
     | K_ORDER
     | K_PRIMARY
     | K_SELECT
@@ -288,14 +309,17 @@ K_CLUSTERING:   C L U S T E R I N G;
 K_COLUMNFAMILY: C O L U M N F A M I L Y;
 K_COMPACT:      C O M P A C T;
 K_CREATE:       C R E A T E;
+K_CUSTOM:       C U S T O M;
 K_DROP:         D R O P;
 K_EXISTS:       E X I S T S;
 K_FALSE:        F A L S E;
 K_FROM:         F R O M;
 K_IF:           I F;
+K_INDEX:        I N D E X;
 K_KEY:          K E Y;
 K_KEYSPACE:     K E Y S P A C E;
 K_NOT:          N O T;
+K_OPTIONS:      O P T I O N S;
 K_ORDER:        O R D E R;
 K_PRIMARY:      P R I M A R Y;
 K_SELECT:       S E L E C T;
