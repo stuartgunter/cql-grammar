@@ -242,6 +242,45 @@ collection_type
 
 
 
+keyword
+    : reserved_keyword
+    | non_reserved_keyword
+    ;
+
+
+non_reserved_keyword
+    : K_CLUSTERING
+    | K_COMPACT
+    | K_KEY
+    | K_STORAGE
+    | K_TYPE
+    ;
+
+reserved_keyword
+    : K_ADD
+    | K_ALTER
+    | K_AND
+    | K_COLUMNFAMILY
+    | K_CREATE
+    | K_DROP
+    | K_EXISTS // docs don't specify whether this is reserved or not, playing it safe
+    | K_FALSE // docs don't specify whether this is reserved or not, playing it safe
+    | K_FROM
+    | K_IF // docs don't specify whether this is reserved or not, playing it safe
+    | K_KEYSPACE
+    | K_NOT // docs don't specify whether this is reserved or not, playing it safe
+    | K_ORDER
+    | K_PRIMARY
+    | K_SELECT
+    | K_STATIC // docs don't specify whether this is reserved or not, playing it safe
+    | K_TABLE
+    | K_TRUE // docs don't specify whether this is reserved or not, playing it safe
+    | K_TRUNCATE
+    | K_USE
+    | K_WITH
+    ;
+
+
 K_ADD:          A D D;
 K_ALTER:        A L T E R;
 K_AND:          A N D;
