@@ -42,6 +42,10 @@ drop_keyspace_stmt
     : K_DROP K_KEYSPACE ( K_IF K_EXISTS )? IDENTIFIER
     ;
 
+use_stmt
+    : K_USE IDENTIFIER
+    ;
+
 
 IDENTIFIER
     : [a-zA-Z0-9_]+
@@ -146,6 +150,7 @@ K_KEYSPACE : K E Y S P A C E;
 K_NOT : N O T;
 K_SELECT : S E L E C T;
 K_TRUE : T R U E;
+K_USE : U S E;
 K_WITH : W I T H;
 
 
