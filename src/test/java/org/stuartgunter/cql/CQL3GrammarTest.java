@@ -23,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CQL3GrammarTest {
 
     private static final String GRAMMAR_NAME = "CQL3";
+    private static final String GRAMMAR_CLASS_PREFIX = String.format("org.stuartgunter.cql.%s", GRAMMAR_NAME);
 
     private final File inputFile;
     private final File expectationFile;
@@ -58,28 +59,26 @@ public class CQL3GrammarTest {
 
     @Test
     public void testGrammar() throws Exception {
-        final String grammarClassPrefix = String.format("org.stuartgunter.cql.%s", GRAMMAR_NAME);
-        final String lexerClassName = String.format("%sLexer", grammarClassPrefix);
-        final String parserClassName = String.format("%sParser", grammarClassPrefix);
+        final String lexerClassName = String.format("%sLexer", GRAMMAR_CLASS_PREFIX);
+        final String parserClassName = String.format("%sParser", GRAMMAR_CLASS_PREFIX);
 
-        final ClassLoader classLoader = this.getClass().getClassLoader();
-        final Class<? extends Lexer> lexerClass = classLoader.loadClass(lexerClassName).asSubclass(Lexer.class);
-        final Class<? extends Parser> parserClass = classLoader.loadClass(parserClassName).asSubclass(Parser.class);
+        final Class<? extends Lexer> lexerClass = Class.forName(lexerClassName).asSubclass(Lexer.class);
+        final Class<? extends Parser> parserClass = Class.forName(parserClassName).asSubclass(Parser.class);
 
         final Constructor<? extends Lexer> lexerConstructor = lexerClass.getConstructor(CharStream.class);
         final Constructor<? extends Parser> parserConstructor = parserClass.getConstructor(TokenStream.class);
 
-        ANTLRFileStream antlrFileStream = new ANTLRFileStream(inputFile.getAbsolutePath(), "UTF-8");
-        Lexer lexer = lexerConstructor.newInstance(antlrFileStream);
+        final ANTLRFileStream antlrFileStream = new ANTLRFileStream(inputFile.getAbsolutePath(), "UTF-8");
+        final Lexer lexer = lexerConstructor.newInstance(antlrFileStream);
         final CommonTokenStream tokens = new CommonTokenStream(lexer);
-
-        Parser parser = parserConstructor.newInstance(tokens);
+        final Parser parser = parserConstructor.newInstance(tokens);
         parser.setErrorHandler(new BailErrorStrategy());
         final Method method = parserClass.getMethod("statements");
-        ParserRuleContext parserRuleContext = (ParserRuleContext) method.invoke(parser);
+        final ParserRuleContext parserRuleContext = (ParserRuleContext) method.invoke(parser);
 
-        final String lispTree = Trees.toStringTree(parserRuleContext, parser);
-        final String expectedTree = new String(Files.readAllBytes(expectationFile.toPath()));
-        assertThat(lispTree).isEqualTo(expectedTree);
+        final String actualParseTree = Trees.toStringTree(parserRuleContext, parser);
+        final String expectedParseTree = new String(Files.readAllBytes(expectationFile.toPath()));
+
+        assertThat(actualParseTree).isEqualTo(expectedParseTree);
     }
 }
