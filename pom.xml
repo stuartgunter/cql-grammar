@@ -55,7 +55,7 @@
                     <entryPoint>statements</entryPoint>
                     <grammarName>CQL3</grammarName>
                     <packageName></packageName>
-                    <exampleFiles>src/test/antlr4/</exampleFiles>
+                    <exampleFiles>src/test/antlr4/cql3/</exampleFiles>
                 </configuration>
                 <executions>
                     <execution>
