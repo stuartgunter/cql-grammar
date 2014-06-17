@@ -94,7 +94,7 @@ index_class
     ;
 
 index_options
-    : K_OPTIONS '=' MAP
+    : K_OPTIONS '=' map
     ;
 
 table_name
@@ -141,50 +141,46 @@ keyspace_name
     : IDENTIFIER
     ;
 
-IDENTIFIER
-    : [a-zA-Z0-9_]+
-    ;
-
-CONSTANT
+constant
     : STRING
     | NUMBER
-    | BOOLEAN
+    | bool
     | UUID
     | BLOB
     ;
 
-VARIABLE
+variable
     : '?'
     | ':' IDENTIFIER
     ;
 
-TERM
-    : CONSTANT
-    | COLLECTION
-    | VARIABLE
-    | FUNCTION
+term
+    : constant
+    | collection
+    | variable
+    | function
     ;
 
-COLLECTION
-    : MAP
-    | SET
-    | LIST
+collection
+    : map
+    | set
+    | list
     ;
 
-MAP
-    : '{' (TERM ':' TERM (',' TERM ':' TERM)*)? '}'
+map
+    : '{' (term ':' term (',' term ':' term)*)? '}'
     ;
 
-SET
-    : '{' (TERM (',' TERM)*)? '}'
+set
+    : '{' (term (',' term)*)? '}'
     ;
 
-LIST
-    : '[' (TERM (',' TERM)*)? ']'
+list
+    : '[' (term (',' term)*)? ']'
     ;
 
-FUNCTION
-    : IDENTIFIER '(' (TERM (',' TERM)*)? ')'
+function
+    : IDENTIFIER '(' (term (',' term)*)? ')'
     ;
 
 properties
@@ -201,46 +197,9 @@ property_name
 
 property_value
     : IDENTIFIER
-    | CONSTANT
-    | MAP
+    | constant
+    | map
     ;
-
-STRING
-    : '\'' ( ~'\'' | '\'\'' )* '\''
-    ;
-
-NUMBER
-    : INTEGER
-    | FLOAT
-    ;
-
-INTEGER
-    : '-'? DIGIT+
-    ;
-
-FLOAT
-    : '-'? DIGIT+ ( '.' DIGIT* )? ( E [+-]? DIGIT+ )?
-    | 'NaN'
-    | 'Infinity'
-    ;
-
-BOOLEAN
-    : K_TRUE
-    | K_FALSE
-    ;
-
-UUID
-    : HEX HEX HEX HEX HEX HEX HEX HEX '-' HEX HEX HEX HEX '-' HEX HEX HEX HEX '-' HEX HEX HEX HEX '-' HEX HEX HEX HEX HEX HEX HEX HEX HEX HEX HEX HEX
-    ;
-
-HEX
-    : [0-9a-fA-F]
-    ;
-
-BLOB
-    : '0' X (HEX)+
-    ;
-
 
 data_type
     : native_type
@@ -273,6 +232,11 @@ collection_type
     | 'map' '<' native_type ',' native_type '>'
     ;
 
+
+bool
+    : K_TRUE
+    | K_FALSE
+    ;
 
 
 keyword
@@ -317,6 +281,7 @@ reserved_keyword
     ;
 
 
+
 K_ADD:          A D D;
 K_ALTER:        A L T E R;
 K_AND:          A N D;
@@ -348,6 +313,45 @@ K_TYPE:         T Y P E;
 K_USE:          U S E;
 K_USING:        U S I N G;
 K_WITH:         W I T H;
+
+
+
+
+IDENTIFIER
+    : [a-zA-Z_] [a-zA-Z0-9_]*
+    ;
+
+
+STRING
+    : '\'' ( ~'\'' | '\'\'' )* '\''
+    ;
+
+NUMBER
+    : INTEGER
+    | FLOAT
+    ;
+
+INTEGER
+    : '-'? DIGIT+
+    ;
+
+FLOAT
+    : '-'? DIGIT+ ( '.' DIGIT* )? ( E [+-]? DIGIT+ )?
+    | 'NaN'
+    | 'Infinity'
+    ;
+
+UUID
+    : HEX HEX HEX HEX HEX HEX HEX HEX '-' HEX HEX HEX HEX '-' HEX HEX HEX HEX '-' HEX HEX HEX HEX '-' HEX HEX HEX HEX HEX HEX HEX HEX HEX HEX HEX HEX
+    ;
+
+HEX
+    : [0-9a-fA-F]
+    ;
+
+BLOB
+    : '0' X (HEX)+
+    ;
 
 
 fragment DIGIT : [0-9];
