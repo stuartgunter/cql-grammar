@@ -50,7 +50,7 @@
                 <artifactId>antlr4test-maven-plugin</artifactId>
                 <version>1.0-SNAPSHOT</version>
                 <configuration>
-                    <verbose>false</verbose>
+                    <verbose>true</verbose>
                     <showTree>true</showTree>
                     <entryPoint>statements</entryPoint>
                     <grammarName>CQL3</grammarName>
