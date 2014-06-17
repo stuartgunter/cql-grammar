@@ -1,0 +1,1 @@
+(statements (statement (drop_index_stmt DROP INDEX (index_name userIndex))) ;)

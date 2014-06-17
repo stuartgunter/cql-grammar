@@ -1,0 +1,1 @@
+(statements (statement (alter_keyspace_stmt ALTER KEYSPACE (keyspace_name Excelsior) WITH (properties (property (property_name replication) = (property_value (map { (term (constant 'class')) : (term (constant 'SimpleStrategy')) , (term (constant 'replication_factor')) : (term (constant 4)) })))))) ;)

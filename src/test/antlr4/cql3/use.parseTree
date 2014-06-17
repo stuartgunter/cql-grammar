@@ -1,0 +1,1 @@
+(statements (statement (use_stmt USE (keyspace_name someKeyspace))) ;)

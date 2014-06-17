@@ -1,0 +1,1 @@
+(statements (statement (truncate_table_stmt TRUNCATE (table_name superImportantData))) ;)

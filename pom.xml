@@ -20,6 +20,24 @@
             <artifactId>antlr4-runtime</artifactId>
             <version>4.2.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>17.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>1.5.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -46,24 +64,9 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.antlr</groupId>
-                <artifactId>antlr4test-maven-plugin</artifactId>
-                <version>1.0-SNAPSHOT</version>
-                <configuration>
-                    <verbose>false</verbose>
-                    <showTree>true</showTree>
-                    <entryPoint>statements</entryPoint>
-                    <grammarName>CQL3</grammarName>
-                    <packageName></packageName>
-                    <exampleFiles>src/test/antlr4/cql3/</exampleFiles>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.17</version>
             </plugin>
         </plugins>
     </build>
