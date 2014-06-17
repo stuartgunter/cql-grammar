@@ -15,7 +15,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Collection;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -43,6 +44,7 @@ public class CQL3GrammarTest {
                 "drop-index",
                 "drop-keyspace",
                 "drop-table",
+                "insert",
                 "truncate",
                 "use");
 

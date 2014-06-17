@@ -35,10 +35,11 @@ statement
     | truncate_table_stmt
     | create_index_stmt
     | drop_index_stmt
+    | insert_stmt
     ;
 
 create_keyspace_stmt
-    : K_CREATE K_KEYSPACE (K_IF K_NOT K_EXISTS)? keyspace_name K_WITH properties
+    : K_CREATE K_KEYSPACE if_not_exists? keyspace_name K_WITH properties
     ;
 
 alter_keyspace_stmt
@@ -46,7 +47,7 @@ alter_keyspace_stmt
     ;
 
 drop_keyspace_stmt
-    : K_DROP K_KEYSPACE (K_IF K_EXISTS)? keyspace_name
+    : K_DROP K_KEYSPACE if_exists? keyspace_name
     ;
 
 use_stmt
@@ -54,7 +55,7 @@ use_stmt
     ;
 
 create_table_stmt
-    : K_CREATE (K_TABLE | K_COLUMNFAMILY) (K_IF K_NOT K_EXISTS)? table_name column_definitions (K_WITH table_options)?
+    : K_CREATE (K_TABLE | K_COLUMNFAMILY) if_not_exists? table_name column_definitions (K_WITH table_options)?
     ;
 
 alter_table_stmt
@@ -69,7 +70,7 @@ alter_table_instruction
     ;
 
 drop_table_stmt
-    : K_DROP K_TABLE (K_IF K_EXISTS)? table_name
+    : K_DROP K_TABLE if_exists? table_name
     ;
 
 truncate_table_stmt
@@ -77,12 +78,33 @@ truncate_table_stmt
     ;
 
 create_index_stmt
-    : K_CREATE (K_CUSTOM)? K_INDEX (K_IF K_NOT K_EXISTS)? index_name? K_ON table_name '(' column_name ')'
+    : K_CREATE (K_CUSTOM)? K_INDEX if_not_exists? index_name? K_ON table_name '(' column_name ')'
       (K_USING index_class (K_WITH index_options)?)?
     ;
 
 drop_index_stmt
-    : K_DROP K_INDEX (K_IF K_EXISTS)? index_name
+    : K_DROP K_INDEX if_exists? index_name
+    ;
+
+insert_stmt
+    : K_INSERT K_INTO table_name column_names K_VALUES column_values if_not_exists? insert_options?
+    ;
+
+column_names
+    : '(' column_name (',' column_name)* ')'
+    ;
+
+column_values
+    : '(' term (',' term)* ')'
+    ;
+
+insert_options
+    : K_USING insert_option (K_AND insert_option)*
+    ;
+
+insert_option
+    : K_TIMESTAMP INTEGER
+    | K_TTL INTEGER
     ;
 
 index_name
@@ -141,9 +163,18 @@ keyspace_name
     : IDENTIFIER
     ;
 
+if_not_exists
+    : K_IF K_NOT K_EXISTS
+    ;
+
+if_exists
+    : K_IF K_EXISTS
+    ;
+
 constant
     : STRING
-    | NUMBER
+    | INTEGER
+    | FLOAT
     | bool
     | UUID
     | BLOB
@@ -239,49 +270,6 @@ bool
     ;
 
 
-keyword
-    : reserved_keyword
-    | non_reserved_keyword
-    ;
-
-
-non_reserved_keyword
-    : K_CLUSTERING
-    | K_COMPACT
-    | K_KEY
-    | K_STORAGE
-    | K_TYPE
-    ;
-
-reserved_keyword
-    : K_ADD
-    | K_ALTER
-    | K_AND
-    | K_COLUMNFAMILY
-    | K_CREATE
-    | K_CUSTOM // docs don't specify whether this is reserved or not, playing it safe
-    | K_DROP
-    | K_EXISTS // docs don't specify whether this is reserved or not, playing it safe
-    | K_FALSE // docs don't specify whether this is reserved or not, playing it safe
-    | K_FROM
-    | K_IF // docs don't specify whether this is reserved or not, playing it safe
-    | K_INDEX
-    | K_KEYSPACE
-    | K_NOT // docs don't specify whether this is reserved or not, playing it safe
-    | K_OPTIONS // docs don't specify whether this is reserved or not, playing it safe
-    | K_ORDER
-    | K_PRIMARY
-    | K_SELECT
-    | K_STATIC // docs don't specify whether this is reserved or not, playing it safe
-    | K_TABLE
-    | K_TRUE // docs don't specify whether this is reserved or not, playing it safe
-    | K_TRUNCATE
-    | K_USE
-    | K_WITH
-    ;
-
-
-
 K_ADD:          A D D;
 K_ALTER:        A L T E R;
 K_AND:          A N D;
@@ -296,6 +284,8 @@ K_FALSE:        F A L S E;
 K_FROM:         F R O M;
 K_IF:           I F;
 K_INDEX:        I N D E X;
+K_INSERT:       I N S E R T;
+K_INTO:         I N T O;
 K_KEY:          K E Y;
 K_KEYSPACE:     K E Y S P A C E;
 K_NOT:          N O T;
@@ -307,11 +297,14 @@ K_SELECT:       S E L E C T;
 K_STATIC:       S T A T I C;
 K_STORAGE:      S T O R A G E;
 K_TABLE:        T A B L E;
+K_TIMESTAMP:    T I M E S T A M P;
 K_TRUE:         T R U E;
 K_TRUNCATE:     T R U N C A T E;
+K_TTL:          T T L;
 K_TYPE:         T Y P E;
 K_USE:          U S E;
 K_USING:        U S I N G;
+K_VALUES:       V A L U E S;
 K_WITH:         W I T H;
 
 
@@ -324,11 +317,6 @@ IDENTIFIER
 
 STRING
     : '\'' ( ~'\'' | '\'\'' )* '\''
-    ;
-
-NUMBER
-    : INTEGER
-    | FLOAT
     ;
 
 INTEGER
@@ -345,15 +333,13 @@ UUID
     : HEX HEX HEX HEX HEX HEX HEX HEX '-' HEX HEX HEX HEX '-' HEX HEX HEX HEX '-' HEX HEX HEX HEX '-' HEX HEX HEX HEX HEX HEX HEX HEX HEX HEX HEX HEX
     ;
 
-HEX
-    : [0-9a-fA-F]
-    ;
 
 BLOB
     : '0' X (HEX)+
     ;
 
 
+fragment HEX : [0-9a-fA-F];
 fragment DIGIT : [0-9];
 fragment A : [aA];
 fragment B : [bB];
@@ -391,5 +377,5 @@ MULTILINE_COMMENT
     ;
 
 WS
-    : [ \t\r\n] -> skip
+    : [ \t\r\n] -> channel(HIDDEN)
     ;
