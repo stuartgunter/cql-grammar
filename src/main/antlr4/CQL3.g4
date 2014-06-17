@@ -21,7 +21,7 @@ grammar CQL3;
 
 
 statements
-    : (statement ';'?)*
+    : statement ( ';'+ statement )* ';'+
     ;
 
 statement
@@ -192,7 +192,17 @@ properties
     ;
 
 property
-    : IDENTIFIER '=' (IDENTIFIER | CONSTANT | MAP)
+    : property_name '=' property_value
+    ;
+
+property_name
+    : IDENTIFIER
+    ;
+
+property_value
+    : IDENTIFIER
+    | CONSTANT
+    | MAP
     ;
 
 STRING
@@ -324,6 +334,7 @@ K_INDEX:        I N D E X;
 K_KEY:          K E Y;
 K_KEYSPACE:     K E Y S P A C E;
 K_NOT:          N O T;
+K_ON:           O N;
 K_OPTIONS:      O P T I O N S;
 K_ORDER:        O R D E R;
 K_PRIMARY:      P R I M A R Y;
@@ -335,6 +346,7 @@ K_TRUE:         T R U E;
 K_TRUNCATE:     T R U N C A T E;
 K_TYPE:         T Y P E;
 K_USE:          U S E;
+K_USING:        U S I N G;
 K_WITH:         W I T H;
 
 
@@ -374,4 +386,6 @@ MULTILINE_COMMENT
     : '/*' .*? ( '*/' | EOF ) -> channel(HIDDEN)
     ;
 
-WS : [ \t\r\n] -> skip ;
+WS
+    : [ \t\r\n] -> skip
+    ;
