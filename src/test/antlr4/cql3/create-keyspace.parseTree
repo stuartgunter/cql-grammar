@@ -1,0 +1,42 @@
+(statements
+    (statement
+        (create_keyspace_stmt
+            CREATE KEYSPACE
+            (keyspace_name Excelsior)
+            WITH
+            (properties
+                (property
+                    (property_name replication)
+                    =
+                    (property_value
+                        (map
+                            {
+                                (term (constant 'class')) : (term (constant 'SimpleStrategy'))
+                                ,
+                                (term (constant 'replication_factor')) : (term (constant 3))
+                            }))))))
+    ;
+    (statement
+        (create_keyspace_stmt
+            CREATE KEYSPACE
+            (keyspace_name Excalibur)
+            WITH
+            (properties
+                (property
+                    (property_name replication)
+                    =
+                    (property_value
+                        (map
+                            {
+                                (term (constant 'class')) : (term (constant 'NetworkTopologyStrategy'))
+                                ,
+                                (term (constant 'DC1')) : (term (constant 1))
+                                ,
+                                (term (constant 'DC2')) : (term (constant 3))
+                            })))
+                AND
+                (property
+                    (property_name durable_writes)
+                    =
+                    (property_value (constant (bool false)))))))
+    ;)
