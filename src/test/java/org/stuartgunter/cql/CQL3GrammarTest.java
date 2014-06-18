@@ -1,7 +1,9 @@
 package org.stuartgunter.cql;
 
 import com.google.common.base.Function;
+import com.google.common.base.Joiner;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.Trees;
@@ -81,8 +83,22 @@ public class CQL3GrammarTest {
         final ParserRuleContext parserRuleContext = (ParserRuleContext) method.invoke(parser);
 
         final String actualParseTree = Trees.toStringTree(parserRuleContext, parser);
-        final String expectedParseTree = new String(Files.readAllBytes(expectationFile.toPath()));
+        final String expectedParseTree = loadExpectation();
 
         assertThat(actualParseTree).isEqualTo(expectedParseTree);
+    }
+
+    private String loadExpectation() throws IOException {
+        ImmutableList<String> lines = FluentIterable
+                .from(Files.readAllLines(expectationFile.toPath()))
+                .transform(new Function<String, String>() {
+                    @Override
+                    public String apply(String line) {
+                        return line.trim();
+                    }
+                })
+                .toList();
+
+        return Joiner.on(" ").join(lines);
     }
 }

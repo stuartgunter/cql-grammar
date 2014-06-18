@@ -1,1 +1,6 @@
-(statements (statement (drop_keyspace_stmt DROP KEYSPACE (keyspace_name myApp))) ;)
+(statements
+    (statement
+        (drop_keyspace_stmt
+            DROP KEYSPACE
+            (keyspace_name myApp)))
+    ;)

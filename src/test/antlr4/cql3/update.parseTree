@@ -1,1 +1,55 @@
-(statements (statement (update_stmt UPDATE (table_name NerdMovies) (upsert_options USING (upsert_option TTL 400)) SET (update_assignments (update_assignment (column_name director) = (term (constant 'Joss Whedon'))) , (update_assignment (column_name main_actor) = (term (constant 'Nathan Fillion'))) , (update_assignment (column_name year) = (term (constant 2005)))) WHERE (where_clause (relation (column_name movie) = (term (constant 'Serenity')))))) ; (statement (update_stmt UPDATE (table_name UserActions) SET (update_assignments (update_assignment (column_name total) = (column_name total) + 2)) WHERE (where_clause (relation (column_name user) = (term (constant B70DE1D0-9908-4AE3-BE34-5573E5B09F14))) AND (relation (column_name action) = (term (constant 'click')))))) ;)
+(statements
+    (statement
+        (update_stmt
+            UPDATE
+            (table_name NerdMovies)
+            (upsert_options
+                USING
+                (upsert_option TTL 400))
+            SET
+            (update_assignments
+                (update_assignment
+                    (column_name director)
+                    =
+                    (term (constant 'Joss Whedon')))
+                ,
+                (update_assignment
+                    (column_name main_actor)
+                    =
+                    (term (constant 'Nathan Fillion')))
+                ,
+                (update_assignment
+                    (column_name year)
+                    =
+                    (term (constant 2005))))
+            WHERE
+            (where_clause
+                (relation
+                    (column_name movie)
+                    =
+                    (term (constant 'Serenity'))))))
+    ;
+    (statement
+        (update_stmt
+            UPDATE
+            (table_name UserActions)
+            SET
+            (update_assignments
+                (update_assignment
+                    (column_name total)
+                    =
+                    (column_name total)
+                    +
+                    2))
+            WHERE
+            (where_clause
+                (relation
+                    (column_name user)
+                    =
+                    (term (constant B70DE1D0-9908-4AE3-BE34-5573E5B09F14)))
+                AND
+                (relation
+                    (column_name action)
+                    =
+                    (term (constant 'click'))))))
+    ;)

@@ -1,1 +1,39 @@
-(statements (statement (alter_table_stmt ALTER TABLE (table_name addamsFamily) (alter_table_instruction ALTER (column_name lastKnownLocation) TYPE (column_type (data_type (native_type uuid)))))) ; (statement (alter_table_stmt ALTER TABLE (table_name addamsFamily) (alter_table_instruction ADD (column_name gravesite) (column_type (data_type (native_type varchar)))))) ; (statement (alter_table_stmt ALTER TABLE (table_name addamsFamily) (alter_table_instruction WITH (table_options (table_option (property (property_name comment) = (property_value (constant 'A most excellent and useful column family')))) AND (table_option (property (property_name read_repair_chance) = (property_value (constant 0.2)))))))) ;)
+(statements
+    (statement
+        (alter_table_stmt
+            ALTER TABLE
+            (table_name addamsFamily)
+            (alter_table_instruction
+                ALTER
+                (column_name lastKnownLocation)
+                TYPE
+                (column_type (data_type (native_type uuid))))))
+        ;
+    (statement
+        (alter_table_stmt
+            ALTER TABLE
+            (table_name addamsFamily)
+            (alter_table_instruction
+                ADD
+                (column_name gravesite)
+                (column_type (data_type (native_type varchar))))))
+        ;
+    (statement
+        (alter_table_stmt
+            ALTER TABLE
+                (table_name addamsFamily)
+                (alter_table_instruction
+                    WITH
+                    (table_options
+                        (table_option
+                            (property
+                                (property_name comment)
+                                =
+                                (property_value (constant 'A most excellent and useful column family'))))
+                        AND
+                        (table_option
+                            (property
+                                (property_name read_repair_chance)
+                                =
+                                (property_value (constant 0.2))))))))
+        ;)

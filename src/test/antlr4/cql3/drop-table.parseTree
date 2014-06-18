@@ -1,1 +1,6 @@
-(statements (statement (drop_table_stmt DROP TABLE (table_name worldSeriesAttendees))) ;)
+(statements
+    (statement
+        (drop_table_stmt
+            DROP TABLE
+            (table_name worldSeriesAttendees)))
+    ;)

@@ -1,1 +1,44 @@
-(statements (statement (create_index_stmt CREATE INDEX (index_name userIndex) ON (table_name NerdMovies) ( (column_name user) ))) ; (statement (create_index_stmt CREATE INDEX ON (table_name Mutants) ( (column_name abilityId) ))) ; (statement (create_index_stmt CREATE CUSTOM INDEX ON (table_name users) ( (column_name email) ) USING (index_class 'path.to.the.IndexClass'))) ; (statement (create_index_stmt CREATE CUSTOM INDEX ON (table_name users) ( (column_name email) ) USING (index_class 'path.to.the.IndexClass') WITH (index_options OPTIONS = (map { (term (constant 'storage')) : (term (constant '/mnt/ssd/indexes/')) })))) ;)
+(statements
+    (statement
+        (create_index_stmt
+            CREATE INDEX
+            (index_name userIndex)
+            ON
+            (table_name NerdMovies)
+            (
+                (column_name user)
+            )))
+    ;
+    (statement
+        (create_index_stmt
+            CREATE INDEX ON
+            (table_name Mutants)
+            (
+                (column_name abilityId)
+            )))
+    ;
+    (statement
+        (create_index_stmt
+            CREATE CUSTOM INDEX ON
+            (table_name users)
+            (
+                (column_name email)
+            )
+            USING
+            (index_class 'path.to.the.IndexClass')))
+    ;
+    (statement
+        (create_index_stmt
+            CREATE CUSTOM INDEX ON
+            (table_name users)
+            (
+                (column_name email)
+            )
+            USING
+            (index_class 'path.to.the.IndexClass')
+            WITH
+                (index_options
+                    OPTIONS
+                    =
+                    (map { (term (constant 'storage')) : (term (constant '/mnt/ssd/indexes/')) }))))
+    ;)
