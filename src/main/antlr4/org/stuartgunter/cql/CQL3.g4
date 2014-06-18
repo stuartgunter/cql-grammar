@@ -37,6 +37,7 @@ statement
     | drop_index_stmt
     | insert_stmt
     | update_stmt
+    | delete_stmt
     ;
 
 create_keyspace_stmt
@@ -152,6 +153,30 @@ relation
     : column_name '=' term
     | column_name K_IN '(' (term (',' term)*)? ')'
     | column_name K_IN '?'
+    ;
+
+delete_stmt
+    : K_DELETE delete_selections? K_FROM table_name
+                        (K_USING K_TIMESTAMP INTEGER)?
+                        K_WHERE where_clause
+                        delete_conditions?
+    ;
+
+delete_conditions
+    : K_IF ( K_EXISTS
+           | (delete_condition (K_AND delete_condition)*))
+    ;
+
+delete_condition
+    : IDENTIFIER ('[' term ']')? '=' term
+    ;
+
+delete_selections
+    : delete_selection (',' delete_selection)*
+    ;
+
+delete_selection
+    : IDENTIFIER ('[' term ']')?
     ;
 
 table_name
@@ -313,6 +338,7 @@ K_COLUMNFAMILY: C O L U M N F A M I L Y;
 K_COMPACT:      C O M P A C T;
 K_CREATE:       C R E A T E;
 K_CUSTOM:       C U S T O M;
+K_DELETE:       D E L E T E;
 K_DROP:         D R O P;
 K_EXISTS:       E X I S T S;
 K_FALSE:        F A L S E;

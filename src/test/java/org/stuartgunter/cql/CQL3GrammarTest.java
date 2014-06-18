@@ -41,6 +41,7 @@ public class CQL3GrammarTest {
                 "alter-table",
                 "create-index",
                 "create-table",
+                "delete",
                 "drop-index",
                 "drop-keyspace",
                 "drop-table",
