@@ -1,0 +1,78 @@
+(statements
+    (statement
+        (batch_stmt
+            BEGIN BATCH
+            (dml_statements
+                (dml_statement
+                    (insert_stmt
+                        INSERT INTO
+                        (table_name users)
+                        (column_names
+                        (
+                            (column_name userid)
+                            ,
+                            (column_name password)
+                            ,
+                            (column_name name)
+                        ))
+                        VALUES
+                        (column_values
+                        (
+                            (term (constant 'user2'))
+                            ,
+                            (term (constant 'ch@ngem3b'))
+                            ,
+                            (term (constant 'second user'))
+                        ))))
+                ;
+                (dml_statement
+                    (update_stmt
+                        UPDATE
+                        (table_name users)
+                        SET
+                        (update_assignments
+                            (update_assignment
+                                (column_name password)
+                                =
+                                (term (constant 'ps22dhds'))))
+                        WHERE
+                        (where_clause
+                            (relation
+                                (column_name userid)
+                                =
+                                (term (constant 'user3'))))))
+                ;
+                (dml_statement
+                    (insert_stmt
+                        INSERT INTO
+                        (table_name users)
+                        (column_names
+                        (
+                            (column_name userid)
+                            ,
+                            (column_name password)
+                        ))
+                        VALUES
+                        (column_values
+                        (
+                            (term (constant 'user4'))
+                            ,
+                            (term (constant 'ch@ngem3c'))
+                        ))))
+                ;
+                (dml_statement
+                    (delete_stmt
+                        DELETE
+                        (delete_selections
+                            (delete_selection name))
+                        FROM
+                        (table_name users)
+                        WHERE
+                        (where_clause
+                            (relation
+                                (column_name userid)
+                                =
+                                (term (constant 'user1'))))))
+                ;)
+            APPLY BATCH))
+    ;)

@@ -38,6 +38,17 @@ statement
     | insert_stmt
     | update_stmt
     | delete_stmt
+    | batch_stmt
+    ;
+
+dml_statements
+    : dml_statement (';'+ dml_statement)* ';'+
+    ;
+
+dml_statement
+    : insert_stmt
+    | update_stmt
+    | delete_stmt
     ;
 
 create_keyspace_stmt
@@ -177,6 +188,18 @@ delete_selections
 
 delete_selection
     : IDENTIFIER ('[' term ']')?
+    ;
+
+batch_stmt
+    : K_BEGIN (K_UNLOGGED | K_COUNTER)? K_BATCH batch_options? dml_statements K_APPLY K_BATCH
+    ;
+
+batch_options
+    : K_USING batch_option (K_AND batch_option)*
+    ;
+
+batch_option
+    : K_TIMESTAMP INTEGER
     ;
 
 table_name
@@ -333,9 +356,13 @@ bool
 K_ADD:          A D D;
 K_ALTER:        A L T E R;
 K_AND:          A N D;
+K_APPLY:        A P P L Y;
+K_BATCH:        B A T C H;
+K_BEGIN:        B E G I N;
 K_CLUSTERING:   C L U S T E R I N G;
 K_COLUMNFAMILY: C O L U M N F A M I L Y;
 K_COMPACT:      C O M P A C T;
+K_COUNTER:      C O U N T E R;
 K_CREATE:       C R E A T E;
 K_CUSTOM:       C U S T O M;
 K_DELETE:       D E L E T E;
@@ -365,6 +392,7 @@ K_TRUE:         T R U E;
 K_TRUNCATE:     T R U N C A T E;
 K_TTL:          T T L;
 K_TYPE:         T Y P E;
+K_UNLOGGED:     U N L O G G E D;
 K_UPDATE:       U P D A T E;
 K_USE:          U S E;
 K_USING:        U S I N G;

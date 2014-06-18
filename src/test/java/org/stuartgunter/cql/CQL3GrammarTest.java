@@ -2,6 +2,7 @@ package org.stuartgunter.cql;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -41,6 +42,7 @@ public class CQL3GrammarTest {
         final Set<String> testCases = ImmutableSet.of(
                 "alter-keyspace",
                 "alter-table",
+                "batch",
                 "create-index",
                 "create-keyspace",
                 "create-table",
@@ -96,6 +98,12 @@ public class CQL3GrammarTest {
                     @Override
                     public String apply(String line) {
                         return line.trim();
+                    }
+                })
+                .filter(new Predicate<String>() {
+                    @Override
+                    public boolean apply(String line) {
+                        return !line.isEmpty();
                     }
                 })
                 .toList();
