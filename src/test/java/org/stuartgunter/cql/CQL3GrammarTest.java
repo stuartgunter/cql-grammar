@@ -46,6 +46,7 @@ public class CQL3GrammarTest {
                 "drop-table",
                 "insert",
                 "truncate",
+                "update",
                 "use");
 
         return FluentIterable

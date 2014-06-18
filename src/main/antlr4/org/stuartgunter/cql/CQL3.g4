@@ -36,6 +36,7 @@ statement
     | create_index_stmt
     | drop_index_stmt
     | insert_stmt
+    | update_stmt
     ;
 
 create_keyspace_stmt
@@ -87,7 +88,7 @@ drop_index_stmt
     ;
 
 insert_stmt
-    : K_INSERT K_INTO table_name column_names K_VALUES column_values if_not_exists? insert_options?
+    : K_INSERT K_INTO table_name column_names K_VALUES column_values if_not_exists? upsert_options?
     ;
 
 column_names
@@ -98,11 +99,11 @@ column_values
     : '(' term (',' term)* ')'
     ;
 
-insert_options
-    : K_USING insert_option (K_AND insert_option)*
+upsert_options
+    : K_USING upsert_option (K_AND upsert_option)*
     ;
 
-insert_option
+upsert_option
     : K_TIMESTAMP INTEGER
     | K_TTL INTEGER
     ;
@@ -117,6 +118,40 @@ index_class
 
 index_options
     : K_OPTIONS '=' map
+    ;
+
+update_stmt
+    : K_UPDATE table_name upsert_options? K_SET update_assignments K_WHERE where_clause update_conditions?
+    ;
+
+update_assignments
+    : update_assignment (',' update_assignment)*
+    ;
+
+update_assignment
+    : column_name '=' term
+    | column_name '=' column_name ('+' | '-') (INTEGER | set | list)
+    | column_name '=' column_name '+' map
+    | column_name '[' term ']' '=' term
+    ;
+
+update_conditions
+    : K_IF update_condition (K_AND update_condition)*
+    ;
+
+update_condition
+    : IDENTIFIER '=' term
+    | IDENTIFIER '[' term ']' '=' term
+    ;
+
+where_clause
+    : relation (K_AND relation)*
+    ;
+
+relation
+    : column_name '=' term
+    | column_name K_IN '(' (term (',' term)*)? ')'
+    | column_name K_IN '?'
     ;
 
 table_name
@@ -283,6 +318,7 @@ K_EXISTS:       E X I S T S;
 K_FALSE:        F A L S E;
 K_FROM:         F R O M;
 K_IF:           I F;
+K_IN:           I N;
 K_INDEX:        I N D E X;
 K_INSERT:       I N S E R T;
 K_INTO:         I N T O;
@@ -294,6 +330,7 @@ K_OPTIONS:      O P T I O N S;
 K_ORDER:        O R D E R;
 K_PRIMARY:      P R I M A R Y;
 K_SELECT:       S E L E C T;
+K_SET:          S E T;
 K_STATIC:       S T A T I C;
 K_STORAGE:      S T O R A G E;
 K_TABLE:        T A B L E;
@@ -302,9 +339,11 @@ K_TRUE:         T R U E;
 K_TRUNCATE:     T R U N C A T E;
 K_TTL:          T T L;
 K_TYPE:         T Y P E;
+K_UPDATE:       U P D A T E;
 K_USE:          U S E;
 K_USING:        U S I N G;
 K_VALUES:       V A L U E S;
+K_WHERE:        W H E R E;
 K_WITH:         W I T H;
 
 
